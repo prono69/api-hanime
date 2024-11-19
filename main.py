@@ -12,20 +12,19 @@ CREATOR = "Eyepatch"
 API_VERSION = "1.0"
 
 # Utility function to format API responses
-def format_response(data, **kwargs):
+def format_response(**kwargs):
     return {
         "creator": CREATOR,
         "api_version": API_VERSION,
         **kwargs,
-        data,
     }
 
 @app.get("/")
 def root(request: Request):
-    return format_response({"message": "Welcome to the API"}, hostname=request.url.hostname)
+    return format_response(message="Welcome to the API", hostname=request.url.hostname)
 
 @app.get("/search")
-async def search(query: str, page: int):
+async def search(query: str, page: int = 0):
     payload = {
         "search_text": query,
         "tags": [],
@@ -40,10 +39,8 @@ async def search(query: str, page: int):
     response_data = response.json()
 
     return format_response(
-        {
-            "results": json.loads(response_data["hits"]),
-            "page": response_data["page"],
-        }
+        results=json.loads(response_data["hits"]),
+        page=response_data["page"],
     )
 
 @app.get("/recent")
@@ -62,10 +59,8 @@ async def recent(page: int = 0):
     response_data = response.json()
 
     return format_response(
-        {
-            "results": json.loads(response_data["hits"]),
-            "page": response_data["page"],
-        }
+        results=json.loads(response_data["hits"]),
+        page=response_data["page"],
     )
 
 @app.get("/trending")
@@ -81,11 +76,9 @@ async def trending(time: str = "month", page: int = 0):
     response_data = response.json()
 
     return format_response(
-        {
-            "results": response_data["hentai_videos"],
-            "time": response_data["time"],
-            "page": response_data["page"],
-        }
+        results=response_data["hentai_videos"],
+        time=response_data["time"],
+        page=response_data["page"],
     )
 
 @app.get("/details")
@@ -108,7 +101,7 @@ async def details(id: str):
         "tags": [tag["text"] for tag in video_data["hentai_tags"]],
     }
 
-    return format_response(formatted_data)
+    return format_response(**formatted_data)
 
 @app.get("/link")
 async def hentai_video(id: str):
@@ -119,7 +112,7 @@ async def hentai_video(id: str):
     response_data = response.json()
 
     return format_response(
-        {"streams": response_data["videos_manifest"]["servers"][0]["streams"]}
+        streams=response_data["videos_manifest"]["servers"][0]["streams"]
     )
 
 @app.get("/play")
