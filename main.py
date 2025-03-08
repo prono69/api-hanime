@@ -90,8 +90,10 @@ async def details(id: str):
     formatted_data = {
         "query": video_data["slug"],
         "name": video_data["name"],
-        "poster": video_data["cover_url"],
+        "slug": video_data["slug"],
+        "cover": video_data["cover_url"],
         "id": video_data["id"],
+        "monthly_rank": video_data["monthly_rank"],
         "description": video_data["description"],
         "views": "{:,}".format(video_data["views"]),
         "likes": video_data["likes"],
