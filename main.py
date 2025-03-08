@@ -94,6 +94,8 @@ async def details(id: str):
         "id": video_data["id"],
         "description": video_data["description"],
         "views": "{:,}".format(video_data["views"]),
+        "likes": video_data["likes"],
+        "dislikes": video_data["dislikes"],
         "brand": video_data["brand"],
         "created_at": parser.parse(video_data["created_at"]).strftime("%Y %m %d"),
         "released_date": parser.parse(video_data["released_at"]).strftime("%Y %m %d"),
